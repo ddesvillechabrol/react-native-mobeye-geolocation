@@ -22,7 +22,6 @@
     "target": "esnext"
   },
   "exclude": [
-    "node_modules",
-    "example"
+    "node_modules"
   ]
 }
