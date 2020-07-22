@@ -2,9 +2,13 @@
  * Sample React Native App
  */
 
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { initiateLocation } from 'react-native-mobeye-geolocation';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import {
+    checkIOSLocationAuthorization,
+    initiateLocation,
+    requestIOSLocationAuthorizatrion,
+} from 'react-native-mobeye-geolocation';
 
 const styles = StyleSheet.create({
     container: {
@@ -26,13 +30,34 @@ const styles = StyleSheet.create({
 });
 
 export default function App() {
+    const [permission, setPermission] = useState(false);
+    const prevPermission = useRef(false);
+
     useEffect(() => {
-        initiateLocation();
+        checkIOSLocationAuthorization().then((res) => {
+            setPermission(res);
+        });
     }, []);
+
+    useEffect(() => {
+        if (!prevPermission.current && permission) {
+            initiateLocation();
+        }
+        prevPermission.current = permission;
+    }, [permission]);
 
     return (
         <View style={styles.container}>
             <Text style={styles.welcome}>☆MobeyeGeolocation example☆</Text>
+            <Text style={styles.instructions}>Have geolocation permission: {String(permission)}</Text>
+            <Button
+                title={'Ask permission'}
+                onPress={() => {
+                    requestIOSLocationAuthorizatrion().then((res) => {
+                        setPermission(res === 'granted');
+                    });
+                }}
+            />
         </View>
     );
 }
