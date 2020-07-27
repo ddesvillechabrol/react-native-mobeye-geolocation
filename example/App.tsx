@@ -5,10 +5,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import {
+    useLocation,
     checkIOSLocationAuthorization,
     initiateLocation,
     requestIOSLocationAuthorizatrion,
 } from 'react-native-mobeye-geolocation';
+import moment from 'moment';
 
 const styles = StyleSheet.create({
     container: {
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
 export default function App() {
     const [permission, setPermission] = useState(false);
     const prevPermission = useRef(false);
+    const location = useLocation();
 
     useEffect(() => {
         checkIOSLocationAuthorization().then((res) => {
@@ -58,6 +61,10 @@ export default function App() {
                     });
                 }}
             />
+            <Text style={styles.instructions}>Latitude: {String(location.latitude)}</Text>
+            <Text style={styles.instructions}>Longitude: {String(location.longitude)}</Text>
+            <Text style={styles.instructions}>Accuracy: {String(location.accuracy)}</Text>
+            <Text style={styles.instructions}>Date: {moment(location.time).format('MM/DD/YYYY hh:mm')}</Text>
         </View>
     );
 }

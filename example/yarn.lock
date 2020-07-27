@@ -4862,6 +4862,11 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+moment@^2.27.0:
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
+  integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -5497,7 +5502,8 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4:
 "react-native-mobeye-geolocation@file:..":
   version "1.0.0"
   dependencies:
-    git "link:../../../Library/Caches/Yarn/v6/npm-react-native-mobeye-geolocation-1.0.0-7b560f84-3fbd-44b5-864e-0db8bbf14dcb-1595333626624/node_modules"
+    "@babel/core" "^7.10.5"
+    git "link:../../../Library/Caches/Yarn/v6/npm-react-native-mobeye-geolocation-1.0.0-7a7c62f6-2c30-4abb-bab6-b60bd394693b-1595846188013/node_modules"
 
 react-native@0.63.1:
   version "0.63.1"
