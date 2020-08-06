@@ -72,7 +72,7 @@ export function useLocation(initService: boolean): Location {
                 }
             }
         );
-        return subscription.remove();
+        return () => subscription.remove();
     }, [])
 
     return location;
