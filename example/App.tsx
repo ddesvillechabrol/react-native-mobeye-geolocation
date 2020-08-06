@@ -3,7 +3,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, PermissionsAndroid, Platform, StyleSheet, Text, View } from 'react-native';
 import {
     useLocation,
     checkIOSLocationAuthorization,
@@ -37,9 +37,15 @@ export default function App() {
     const location = useLocation();
 
     useEffect(() => {
-        checkIOSLocationAuthorization().then((res) => {
-            setPermission(res);
-        });
+        if (Platform.OS === 'ios') {
+            checkIOSLocationAuthorization().then((res) => {
+                setPermission(res);
+            });
+        } else {
+            PermissionsAndroid.check('android.permission.ACCESS_FINE_LOCATION').then((res) => {
+                setPermission(res);
+            });
+        }
     }, []);
 
     useEffect(() => {
@@ -49,6 +55,8 @@ export default function App() {
         prevPermission.current = permission;
     }, [permission]);
 
+    const date = Platform.OS === 'ios' ? moment.unix(location.time) : moment(location.time);
+
     return (
         <View style={styles.container}>
             <Text style={styles.welcome}>☆MobeyeGeolocation example☆</Text>
@@ -56,15 +64,21 @@ export default function App() {
             <Button
                 title={'Ask permission'}
                 onPress={() => {
-                    requestIOSLocationAuthorizatrion().then((res) => {
-                        setPermission(res === 'granted');
-                    });
+                    if (Platform.OS === 'ios') {
+                        requestIOSLocationAuthorizatrion().then((res) => {
+                            setPermission(res === 'granted');
+                        });
+                    } else {
+                        PermissionsAndroid.request('android.permission.ACCESS_FINE_LOCATION').then((res) => {
+                            setPermission(res === 'granted');
+                        });
+                    }
                 }}
             />
             <Text style={styles.instructions}>Latitude: {String(location.latitude)}</Text>
             <Text style={styles.instructions}>Longitude: {String(location.longitude)}</Text>
             <Text style={styles.instructions}>Accuracy: {String(location.accuracy)}</Text>
-            <Text style={styles.instructions}>Date: {moment(location.time).format('MM/DD/YYYY hh:mm')}</Text>
+            <Text style={styles.instructions}>Date: {date.format('MM/DD/YYYY hh:mm')}</Text>
         </View>
     );
 }

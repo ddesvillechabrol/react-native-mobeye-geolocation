@@ -3087,10 +3087,6 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-"git@link:../..":
-  version "0.0.0"
-  uid ""
-
 glob-parent@^5.0.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.1.tgz#b6c1ef417c4e5663ea498f1c45afac6916bbc229"
@@ -5501,9 +5497,6 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4:
 
 "react-native-mobeye-geolocation@file:..":
   version "1.0.0"
-  dependencies:
-    "@babel/core" "^7.10.5"
-    git "link:../../../Library/Caches/Yarn/v6/npm-react-native-mobeye-geolocation-1.0.0-7a7c62f6-2c30-4abb-bab6-b60bd394693b-1595846188013/node_modules"
 
 react-native@0.63.1:
   version "0.63.1"
