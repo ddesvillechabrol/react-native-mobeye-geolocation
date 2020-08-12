@@ -17,7 +17,7 @@
     "react-native-mobeye-geolocation.podspec"
   ],
   "scripts": {
-    "example:start": "yarn && cd example/ && yarn && rm -rf ../node_modules && yarn start",
+    "start": "react-native start",
     "prepare": "bob build"
   },
   "repository": {
@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.11.0",
+    "@babel/runtime": "^7.11.2",
     "@react-native-community/bob": "^0.16.2",
     "@types/react": "^16.9.43",
     "@types/react-native": "^0.63.1",
@@ -52,6 +53,8 @@
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8",
     "eslint-plugin-react-native": "^3.8.1",
+    "metro-react-native-babel-preset": "^0.62.0",
+    "moment": "^2.27.0",
     "prettier": "^2.0.5",
     "react": "16.11.0",
     "react-native": "0.62.2",
