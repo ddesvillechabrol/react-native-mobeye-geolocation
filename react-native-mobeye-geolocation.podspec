@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
   s.platforms    = { :ios => "10.0" }
   s.source       = { :git => "https://github.com/Mobeye/react-native-mobeye-geolocation.git", :tag => "#{s.version}" }
-  s.swift_versions = "4.0"
+  s.swift_versions = "5.0"
 
   s.source_files = "ios/**/*.{h,c,m,swift}"
   s.requires_arc = true
