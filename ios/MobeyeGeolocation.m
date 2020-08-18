@@ -10,13 +10,17 @@
 #import "React/RCTEventEmitter.h"
 
 @interface RCT_EXTERN_MODULE(MobeyeGeolocation, RCTEventEmitter)
-RCT_EXTERN_METHOD(initiateLocation: (RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(initiateLocation: (nonnull NSInteger)bufferSize
+                  resolver: (RCTPromiseResolveBlock)resolve
                   rejecter: (RCTPromiseRejectBlock)reject
                   );
 RCT_EXTERN_METHOD(getLastLocations: (nonnull NSInteger)number
                   resolver: (RCTPromiseResolveBlock)resolve
                   rejecter: (RCTPromiseRejectBlock)reject
                   );
+RCT_EXTERN_METHOD(getAccurateLocation: (RCTPromiseResolveBlock)resolve
+                  rejecter: (RCTPromiseRejectBlock)reject
+);
 RCT_EXTERN_METHOD(checkPermission: (RCTPromiseResolveBlock)resolve
                   rejecter: (RCTPromiseRejectBlock)reject
                   );

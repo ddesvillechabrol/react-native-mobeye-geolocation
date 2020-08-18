@@ -15,11 +15,10 @@ import CoreLocation
  */
 @objc(MobeyeGeolocation)
 class MobeyeGeolocation: RCTEventEmitter {
-  private static let maxSize = 40
   private let locationManager = CLLocationManager()
   var resolver: RCTPromiseResolveBlock!
   var lastUsedLocation: MyLocation!
-  var locationBuffer = RingBuffer<MyLocation>(MobeyeGeolocation.maxSize)
+  var locationBuffer: RingBuffer<MyLocation>
   var isBackground = false
   
   override static func requiresMainQueueSetup() -> Bool {
@@ -38,11 +37,14 @@ class MobeyeGeolocation: RCTEventEmitter {
     - reject: return to the JS code if the promise is rejected.
    */
   @objc
-  func initiateLocation(_ resolve: RCTPromiseResolveBlock,
+  func initiateLocation(_ bufferSize: NSInteger,
+                        resolver resolve: RCTPromiseResolveBlock,
                         rejecter reject: RCTPromiseRejectBlock) -> Void
   {
+    /* Create RingBuffer */
+    self.locationBuffer = RingBuffer<MyLocation>(bufferSize)
     /* Set foreground options and start the service */
-    self.locationManager.distanceFilter = 20
+    self.locationManager.distanceFilter = 50
     self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
     self.locationManager.delegate = self
     self.locationManager.startUpdatingLocation()
@@ -62,7 +64,7 @@ class MobeyeGeolocation: RCTEventEmitter {
       /* Initiate the ring buffer with stored locations */
       jsonData = storedLocations!.data(using: .utf8)!
       let locationsArray = try! decoder.decode([MyLocation].self, from: jsonData)
-      self.locationBuffer = try! RingBuffer<MyLocation>(MobeyeGeolocation.maxSize, array: locationsArray)
+      self.locationBuffer = try! RingBuffer<MyLocation>(bufferSize, array: locationsArray)
     }
     let storedLastUsedLocation = UserDefaults.standard.string(forKey: "lastUsedLocation")
     if (storedLastUsedLocation != nil) {
@@ -102,6 +104,20 @@ class MobeyeGeolocation: RCTEventEmitter {
     let data = try! JSONEncoder().encode(locationList)
     stringDict = String(data: data, encoding: String.Encoding.utf8) ?? ""
     resolve(stringDict)
+  }
+  
+  /*
+   Get one location pretty accurate.
+   */
+  @objc
+  func getAccurateLocation(_ resolve: RCTPromiseResolveBlock,
+                           rejecter reject: RCTPromiseRejectBlock) -> Void
+  {
+    self.locationManager.stopUpdatingLocation()
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+    self.locationManager.requestLocation()
+    self.locationManager.startUpdatingLocation()
+    self.setHighAccuracyOptions()
   }
   
   /**
@@ -163,7 +179,8 @@ class MobeyeGeolocation: RCTEventEmitter {
   /**
    Method executed when the app is in background
    */
-  @objc func backgroundActivity(notification: NSNotification){
+  @objc
+  func backgroundActivity(notification: NSNotification){
     self.writeBufferInStore()
     self.setBackgroundOptions()
     self.isBackground = true
@@ -201,6 +218,27 @@ class MobeyeGeolocation: RCTEventEmitter {
       return
     }
     self.locationManager.startMonitoringSignificantLocationChanges()
+  }
+  
+  /**
+   Set provider options for high accuracy.
+   Be careful those options will drain the battery.
+   */
+  private func setHighAccuracyOptions() {
+    self.locationManager.stopUpdatingLocation()
+    self.locationManager.distanceFilter = 20
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    self.locationManager.startUpdatingLocation()
+  }
+  
+  /**
+   Set provider option for a balanced battery usage.
+   */
+  private func setBalancedOptions() {
+    self.locationManager.stopUpdatingLocation()
+    self.locationManager.distanceFilter = 50
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+    self.locationManager.startUpdatingLocation()
   }
 }
 
